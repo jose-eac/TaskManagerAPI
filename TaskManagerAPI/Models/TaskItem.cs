@@ -8,7 +8,7 @@ namespace TaskManagerAPI.Models
         [Required(ErrorMessage = "The Name field is required.")]
         [StringLength(100, ErrorMessage = "The Name field cannot exceed 100 characters.")]
         public string? Name { get; set; }
-        public bool IsCompleted { get; set; } = false;
+        public bool IsComplete { get; set; } = false;
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         [DateInTheFuture(ErrorMessage = "The DueDate field should be on a future date.")]
         public DateTime? DueDate { get; set; }

@@ -41,6 +41,18 @@ namespace TaskManagerAPI.Controllers
             return taskItem;
         }
 
+        [HttpGet("completed")]
+        public async Task<ActionResult<IEnumerable<TaskItem>>> GetCompletedTaskItems()
+        {
+            // Query the database for completed task items
+            var completedTasks = await _context.TaskItems
+                .Where(task => task.IsComplete)
+                .ToListAsync();
+
+            // Return the list of completed tasks
+            return Ok(completedTasks);
+        }
+
         // PUT: api/TaskItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
