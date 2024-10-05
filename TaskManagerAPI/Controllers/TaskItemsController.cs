@@ -100,6 +100,38 @@ namespace TaskManagerAPI.Controllers
             return NoContent();
         }
 
+        // PATCH: api/TaskItems/5/complete
+        [HttpPatch("{id}/complete")]
+        public async Task<IActionResult> MarkTaskComplete(int id)
+        {
+            var task = await _context.TaskItems.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            task.IsComplete = true;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!TaskItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/TaskItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
