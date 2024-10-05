@@ -24,7 +24,9 @@ namespace TaskManagerAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTaskItems()
         {
-            return await _context.TaskItems.ToListAsync();
+            var items = await _context.TaskItems.ToListAsync();
+
+            return Ok(items);
         }
 
         // GET: api/TaskItems/5
@@ -41,6 +43,7 @@ namespace TaskManagerAPI.Controllers
             return taskItem;
         }
 
+        // GET: api/TaskItems/completed
         [HttpGet("completed")]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetCompletedTaskItems()
         {
@@ -53,8 +56,21 @@ namespace TaskManagerAPI.Controllers
             return Ok(completedTasks);
         }
 
+
+        // GET: api/TaskItems/active
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<TaskItem>>> GetActiveTaskItems()
+        {
+            // Query the database for completed task items
+            var activeTasks = await _context.TaskItems
+                .Where(task => !task.IsComplete)
+                .ToListAsync();
+
+            // Return the list of incompolete tasks
+            return Ok(activeTasks);
+        }
+
         // PUT: api/TaskItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTaskItem(int id, TaskItem taskItem)
         {
